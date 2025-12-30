@@ -13,10 +13,18 @@ class Database
     {
         $this->conexao = null;
 
+        try {
+            $this->conexao = new PDO(
+                "mysql:host" . $this->host . ";dbname=" . $this->db_name,
+                $this->username,
+                $this->password
+            );
+            $this->conexao->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $this->conexao->exec("set names utf8");
+        } catch (PDOException $exception) {
+            echo "Erro de conexão: " . $exception->getMessage();
+        }
 
-
+        return $this->conexao;
     }
-
-
-
 }
