@@ -1,8 +1,9 @@
 <?php
 
-define('DB_HOST', 'localhost');
-define('DB_NAME', 'gestao_doadores');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-
+class Config {
+    const DB_HOST = 'localhost';
+    const DB_NAME = 'gestao_doadores';
+    const DB_USER = 'root';
+    const DB_PASS = '';
+}
 ?>
