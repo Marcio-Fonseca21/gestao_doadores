@@ -1,12 +1,12 @@
 <?php
-// public/index.php
 
 spl_autoload_register(function ($class_name) {
 
     $dirs = [
         '../app/Models/',
         '../Config/',
-        '../app/Controllers/'
+        '../app/Controllers/',
+        '../app/Core/'
     ];
     foreach ($dirs as $dir) {
         $file = __DIR__ . '/' . $dir . $class_name . '.php';
@@ -17,13 +17,7 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
-// if (class_exists('Config'))
-//    echo 's';
-// else 
-//     echo 'n';
-
-//$controller = new UsuarioController();
-//$controller->listar();
+Router::load();
 
 $homeController = new HomeController();
 $homeController->index();

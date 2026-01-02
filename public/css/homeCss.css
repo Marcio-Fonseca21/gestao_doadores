@@ -281,3 +281,37 @@ body {
         padding: 50px 5%;
     }
 }
+.campaigns-carousel {
+    display: flex;          /* Alinha os cards na horizontal */
+    overflow-x: auto;       /* Permite rolagem horizontal */
+    gap: 20px;              /* Espaço entre os cards */
+    padding: 10px 0;        /* Espaço em cima e embaixo */
+}
+
+.campaigns-carousel::-webkit-scrollbar {
+    display: none;          /* Esconde a barra de rolagem no Chrome/Safari */
+}
+
+.campaign-card {
+    flex: 0 0 300px;        /* Largura fixa de 300px para cada card */
+    background: white;      
+    padding: 20px;          
+    border-radius: 10px;    
+    border: 1px solid #eee; 
+}
+
+.campaign-card button {
+    width: 100%;            
+    padding: 10px;          
+    border: none;           
+    background: #bc1a22;    
+    color: white;           
+    border-radius: 5px;     
+    cursor: pointer;        
+}
+
+@media (max-width: 768px) {
+    .campaign-card {
+        flex: 0 0 80%;      /* Cards maiores no celular para facilitar leitura */
+    }
+}

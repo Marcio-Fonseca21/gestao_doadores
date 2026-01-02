@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="../../public/css/login.css" />
+    <link rel="stylesheet" href="css/Login.css" />
     <link rel="icon" href="../favcon/favicon.ico">
   </head>
 
@@ -39,7 +39,7 @@
             />
             <button type="submit">Logar</button>
             <p>
-              Não possuí uma conta? <a id ="cadastrarA" href="CadastroDador.php">Cadastrar</a>
+              Não possuí uma conta? <a id ="cadastrarA" href="index.php?c=usuario&a=getCadastroPublico">Cadastrar</a>
             </p>
           </fieldset>
         </form>
