@@ -100,7 +100,6 @@
         <div class="container">
             <h2 class="title-red">Campanhas Ativas</h2>
             <div class="campaigns-carousel">
-
                 <?php
                 if (!empty($campanhas)) {
                     foreach ($campanhas as $campanha) {
@@ -121,7 +120,7 @@
 
     </div>
     </section>
-    <script src="/js/home.js"></script>
+    <script src="js/home.js"></script>
 </body>
 
 </html>

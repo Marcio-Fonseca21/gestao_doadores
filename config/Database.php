@@ -9,7 +9,7 @@ class Database
     private $password = Config::DB_PASS;
     public $conexao;
 
-    public function getConnection()
+    public function getConexao()
     {
         $this->conexao = null;
 

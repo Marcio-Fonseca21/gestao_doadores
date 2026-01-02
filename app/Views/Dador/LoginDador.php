@@ -21,8 +21,8 @@
       <form action="dashbord.html" method="POST">
         <fieldset>
           <legend>Login</legend>
-          <label for="dador_bi">Nº do BI:</label>
-          <input type="text" name="dador_bi" id="dador_bi" placeholder="Digite o número do BI" required />
+          <label for="dador_documento">Nº do Documento:</label>
+          <input type="text" name="dador_bi" id="dador_bi" placeholder="Digite o número do Documento" required />
 
           <label for="dador_senha">Senha:</label>
           <input type="password" name="dador_senha" id="dador_senha" placeholder="Digite a sua senha" required />
