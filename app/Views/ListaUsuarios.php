@@ -49,20 +49,21 @@
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($usuarios)): ?>
-                    <?php foreach ($usuarios as $user): ?>
-                        <tr>
-                            <td><?php echo $user['id_usuario']; ?></td>
-                            <td><?php echo htmlspecialchars($user['nome']); ?></td>
-                            <td><?php echo htmlspecialchars($user['email']); ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <tr>
-                        <td colspan="3">Nenhum usuário encontrado.</td>
-                    </tr>
-                <?php endif; ?>
+                <?php
+                if (!empty($usuarios)) {
+                    foreach ($usuarios as $user) {
+                        echo "<tr>
+                    <td>{$user['id_usuario']}</td>
+                    <td>" . htmlspecialchars($user['nome']) . "</td>
+                    <td>" . htmlspecialchars($user['email']) . "</td>
+                  </tr>";
+                    }
+                } else {
+                    echo "<tr><td colspan='3'>Nenhum usuário encontrado.</td></tr>";
+                }
+                ?>
             </tbody>
+
         </table>
     </div>
 

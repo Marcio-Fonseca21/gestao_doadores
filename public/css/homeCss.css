@@ -1,0 +1,283 @@
+/* ============================================================
+   1. VARIÁVEIS E RESET
+   ============================================================ */
+:root {
+    --vermelho-sangue: #bc1a22;
+    --vermelho-hover: #8e1319;
+    --vermelho-suave: #fff5f5; /* Fundo para seções */
+    --branco: #ffffff;
+    --cinza-claro: #f4f4f4;
+    --texto-escuro: #333333;
+    --texto-suave: #666666;
+    --transicao: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+html {
+    scroll-behavior: smooth; 
+}
+
+body {
+    background-color: var(--branco);
+    color: var(--texto-escuro);
+    line-height: 1.6;
+}
+
+/* ============================================================
+   2. NAVEGAÇÃO (NAVBAR) - CORRIGIDA E RESPONSIVA
+   ============================================================ */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 8%;
+    background: var(--branco);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--texto-escuro);
+    text-decoration: none;
+}
+
+.logo span {
+    color: var(--vermelho-sangue);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: var(--texto-escuro);
+    font-weight: 500;
+    transition: var(--transicao);
+}
+
+.nav-links a:hover {
+    color: var(--vermelho-sangue);
+}
+
+/* O botão Entrar */
+.btn-nav {
+    background-color: var(--vermelho-sangue);
+    color:white !important;
+    padding: 8px 20px;
+    border-radius: 5px;
+    transition: background-color var(--transicao);
+}
+
+.btn-nav:hover {
+    background-color: var(--vermelho-hover);
+}
+
+/* ============================================================
+   3. HEADER / TOPO (COMPACTO)
+   ============================================================ */
+.topo {
+    height: 60vh;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), 
+                url('https://images.unsplash.com/photo-1615461066841-6116ecaaba7d?auto=format&fit=crop&w=1200');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.topo-content h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.btn-main {
+    display: inline-block;
+    padding: 12px 30px;
+    background: var(--vermelho-sangue);
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: transform var(--transicao);
+}
+
+.btn-main:hover {
+    transform: scale(1.05);
+}
+
+/* ============================================================
+   4. SEÇÕES E GRIDS
+   ============================================================ */
+.section {
+    padding: 70px 8%;
+    text-align: center;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.title-red { color: var(--vermelho-sangue); margin-bottom: 40px; font-size: 2rem; }
+.title-dark { color: var(--texto-escuro); margin-bottom: 40px; font-size: 2rem; }
+
+/* Cores de fundo das seções */
+.sec-white { background-color: var(--branco); }
+.sec-red-light { background-color: var(--vermelho-suave); }
+.sec-grey { background-color: var(--cinza-claro); }
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+/* Cards de Informação */
+.info-card {
+    background: white;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-bottom: 4px solid var(--vermelho-sangue);
+}
+
+/* Passos do "Como doar" */
+.steps {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.step-item {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    width: 220px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.step-item span {
+    display: block;
+    font-size: 2.2rem;
+    color: var(--vermelho-sangue);
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Cards de Campanhas */
+.campaign-card {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    position: relative;
+    border: 1px solid #eee;
+    transition: transform var(--transicao);
+}
+
+.campaign-card:hover {
+    transform: translateY(-5px);
+}
+
+.tag {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: var(--vermelho-sangue);
+    color: white;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.campaign-card button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
+    border: none;
+    background: var(--vermelho-sangue);
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+.impacto-doacao p {
+    text-align: justify;
+    line-height: 1.8;
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 1.2rem;
+}
+
+/* EFEITO DE PULSAÇÃO APENAS NO BOTÃO "QUERO AJUDAR ALGUÉM" */
+.btn-main {
+    position: relative;
+    overflow: visible;
+    animation: pulseAjuda 2s infinite;
+}
+
+@keyframes pulseAjuda {
+    0% {
+        box-shadow: 0 0 0 0 rgba(188, 26, 34, 0.5);
+    }
+    70% {
+        box-shadow: 0 0 0 18px rgba(188, 26, 34, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(188, 26, 34, 0);
+    }
+}
+
+/* ============================================================
+   5. RESPONSIVIDADE (PARA CELULARES)
+   ============================================================ */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column; /* Logo em cima, menu embaixo */
+        padding: 15px 20px;
+        gap: 15px;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap; /* Quebra linha se os links forem muitos */
+    }
+
+    .nav-links a {
+        font-size: 0.9rem;
+    }
+
+    .btn-nav {
+        padding: 6px 15px; /* Botão menor no celular */
+    }
+
+    .topo-content h1 {
+        font-size: 1.8rem;
+    }
+
+    .section {
+        padding: 50px 5%;
+    }
+}
