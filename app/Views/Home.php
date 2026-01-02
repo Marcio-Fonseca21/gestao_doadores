@@ -16,7 +16,7 @@
             <li><a href="#sensibilizacao">Por que doar?</a></li>
             <li><a href="#como-doar">Como funciona</a></li>
             <li><a href="#campanhas">Campanhas</a></li>
-            <li><a href="index.php?c=usuario&a=getLoginPublico" class="btn-nav">Entrar</a></li>
+            <li><a href="/gestao_doadores/public/loginPublico" class="btn-nav">Entrar</a></li>
         </ul>
     </nav>
 
@@ -96,30 +96,30 @@
             </div>
         </div>
     </section>
-<section id="campanhas" class="section sec-grey">
-    <div class="container">
-        <h2 class="title-red">Campanhas Ativas</h2>
-        <div class="campaigns-carousel">
+    <section id="campanhas" class="section sec-grey">
+        <div class="container">
+            <h2 class="title-red">Campanhas Ativas</h2>
+            <div class="campaigns-carousel">
 
-            <?php
-            if (!empty($campanhas)) {
-                foreach ($campanhas as $campanha) {
-                    echo '<div class="campaign-card">';
-                    echo '<h3>' . $campanha['nome_campanha'] . '</h3>';
-                    echo '<p>' . $campanha['descricao'] . '</p>';
-                    echo '<button onclick="agendar()">Agendar</button>';
-                    echo '</div>';
+                <?php
+                if (!empty($campanhas)) {
+                    foreach ($campanhas as $campanha) {
+                        echo '<div class="campaign-card">';
+                        echo '<h3>' . $campanha['nome_campanha'] . '</h3>';
+                        echo '<p>' . $campanha['descricao'] . '</p>';
+                        echo '<button onclick="agendar()">Agendar</button>';
+                        echo '</div>';
+                    }
+                } else {
+                    echo "<p>Nenhuma Campanha encontrada.</p>";
                 }
-            } else {
-                echo "<p>Nenhuma Campanha encontrada.</p>";
-            }
-            ?>
+                ?>
 
+            </div>
         </div>
+    </section>
+
     </div>
-</section>
-
-        </div>
     </section>
     <script src="/js/home.js"></script>
 </body>

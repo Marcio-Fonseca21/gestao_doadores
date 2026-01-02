@@ -2,27 +2,44 @@
 
 class Router
 {
-    public static function load()
+    public static function run()
     {
-        $controller = $_GET['c'] ?? 'home';
-        $action     = $_GET['a'] ?? 'index';
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-        $controllerName = ucfirst($controller) . 'Controller';
-        $controllerFile = __DIR__ . "/../Controllers/$controllerName.php";
+        // remove /gestao_doadores/public
+        $basePath = '/gestao_doadores/public';
+        $route = str_replace($basePath, '', $uri);
+        $route = trim($route, '/');
 
-        if (!file_exists($controllerFile)) {
-            die("Controller '$controllerName' não encontrado");
+        switch ($route) {
+            case '':
+                self::call('HomeController', 'index');
+                break;
+
+            case 'loginPublico':
+                self::call('UsuarioController', 'getLoginPublico');
+                break;
+
+            case 'cadastroPublico':
+                self::call('UsuarioController', 'getCadastroPublico');
+                break;
+
+            default:
+                http_response_code(404);
+                echo 'Página não encontrada';
         }
+    }
 
-        //require_once $controllerFile;
+    private static function call($controller, $action)
+    {
+        require_once "../app/Controllers/$controller.php";
 
-        $obj = new $controllerName();
+        $obj = new $controller();
 
         if (!method_exists($obj, $action)) {
-            die("Ação '$action' não encontrada no controller '$controllerName'");
+            die('Ação não encontrada');
         }
 
         $obj->$action();
-        
     }
 }

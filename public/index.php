@@ -17,7 +17,7 @@ spl_autoload_register(function ($class_name) {
     }
 });
 
-Router::load();
+Router::run();
 
 $homeController = new HomeController();
 $homeController->index();
