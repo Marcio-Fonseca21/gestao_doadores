@@ -1,4 +1,5 @@
 <?php
+require_once  BASE_PATH . '/app/Models/Enum/TipoUsuario.php';
 
 class Usuario
 {
