@@ -5,20 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bem-Vindo a gestão de Doadores</title>
-    <link rel="stylesheet" href="css/HomeCss.css">
+    <link rel="stylesheet" href="<?= BASE_URL_PUBLIC ?>/css/HomeCss.css">
 </head>
 
 <body>
 
-    <nav class="navbar">
-        <div class="logo">Doe<span>Vida</span></div>
-        <ul class="nav-links">
-            <li><a href="#sensibilizacao">Por que doar?</a></li>
-            <li><a href="#como-doar">Como funciona</a></li>
-            <li><a href="#campanhas">Campanhas</a></li>
-            <li><a href="/gestao_doadores/public/loginPublico" class="btn-nav">Entrar</a></li>
-        </ul>
-    </nav>
+    <?php
+    require BASE_PATH . '/app/Views/Template/Menu.php';
+    ?>
 
     <header class="topo">
         <div class="topo-content">
@@ -96,6 +90,7 @@
             </div>
         </div>
     </section>
+
     <section id="campanhas" class="section sec-grey">
         <div class="container">
             <h2 class="title-red">Campanhas Ativas</h2>
@@ -104,23 +99,30 @@
                 if (!empty($campanhas)) {
                     foreach ($campanhas as $campanha) {
                         echo '<div class="campaign-card">';
-                        echo '<h3>' . $campanha['nome_campanha'] . '</h3>';
-                        echo '<p>' . $campanha['descricao'] . '</p>';
-                        echo '<button onclick="agendar()">Agendar</button>';
+                        // Usando htmlspecialchars para segurança
+                        echo '<h3>' . htmlspecialchars($campanha['nome_campanha']) . '</h3>';
+
+                        // Resumo da descrição
+                        $resumo = mb_strimwidth($campanha['descricao'], 0, 100, "...");
+                        echo '<p>' . htmlspecialchars($resumo) . '</p>';
+
+                        // CORREÇÃO AQUI: Alterado de ['id'] para ['campanha_id']
+                        echo '<a href="/gestao_doadores/public/campanha/detalhes?id=' . $campanha['id_campanha'] . '" class="btn-main">Ver mais</a>';
+
                         echo '</div>';
                     }
                 } else {
-                    echo "<p>Nenhuma Campanha encontrada.</p>";
+                    echo "<p>Nenhuma Campanha encontrada no momento.</p>";
                 }
                 ?>
-
             </div>
         </div>
     </section>
 
     </div>
     </section>
-    <script src="js/home.js"></script>
+    <script src="<?= BASE_URL_PUBLIC ?>/js/home.js"></script>
+
 </body>
 
 </html>

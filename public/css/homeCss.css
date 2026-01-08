@@ -315,3 +315,9 @@ body {
         flex: 0 0 80%;      /* Cards maiores no celular para facilitar leitura */
     }
 }
+
+.facaLogin {
+    color: #d32f2f;   /* Um vermelho padrão de aviso */
+    font-size: 14px;  /* Tamanho discreto */
+    font-weight: 500; /* Leve destaque */
+}

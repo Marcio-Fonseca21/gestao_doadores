@@ -4,6 +4,7 @@ class Router
 {
     public static function run()
     {
+        session_start();
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
         $basePath = '/gestao_doadores/public';
@@ -19,6 +20,10 @@ class Router
                 self::call('UsuarioController', 'getLoginPublico');
                 break;
 
+            case 'loginPublico/login':
+                self::call('UsuarioController', 'loginDador');
+                break;
+
             case 'cadastroPublico':
                 self::call('UsuarioController', 'getCadastroPublico');
                 break;
@@ -26,7 +31,15 @@ class Router
             case 'addDoador':
                 self::call('UsuarioController', 'registarDador');
                 break;
-
+            case 'sair':
+                self::call('UsuarioController', 'sair');
+                break;
+            case 'campanha/detalhes': // Quando acede a /public/detalhes
+                self::call('CampanhaController', 'verDetalhes');
+                break;
+            case 'dador/dashboard':
+                self::call('UsuarioController', 'dashboardDador');
+                break;
 
             default:
                 http_response_code(404);

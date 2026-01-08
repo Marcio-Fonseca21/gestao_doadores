@@ -18,14 +18,22 @@
   <div class="container">
     <div class="imagemFundo"></div>
     <div class="inputs-group">
-      <form action="dashbord.html" method="POST">
+      <form action="/gestao_doadores/public/loginPublico/login" method="POST">
         <fieldset>
           <legend>Login</legend>
+          <?php
+          if ($msg = Flash::get('login_erro')) {
+            echo "<p style='color:red; text-align:center'>$msg</p>";
+          }
+          ?>
+
+
           <label for="dador_documento">Nº do Documento:</label>
-          <input type="text" name="dador_bi" id="dador_bi" placeholder="Digite o número do Documento" required />
+          <input type="text" name="numeroDocumento" id="numeroDocumento" placeholder="Digite o número do Documento"
+            required />
 
           <label for="dador_senha">Senha:</label>
-          <input type="password" name="dador_senha" id="dador_senha" placeholder="Digite a sua senha" required />
+          <input type="password" name="senha" id="senha" placeholder="Digite a sua senha" required />
           <button type="submit">Logar</button>
           <p>
             Não possuí uma conta? <a id="cadastrarA" href="/gestao_doadores/public/cadastroPublico">Cadastrar</a>

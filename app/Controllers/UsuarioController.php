@@ -7,12 +7,11 @@ class UsuarioController
         $usuarioModel = new Usuario();
         $usuarios = $usuarioModel->getUsuarios();
 
-        require_once __DIR__ . '/../Views/Lista_usuarios.php';
+        require_once __DIR__ . '/../Views/Lista_usuarios.php';//Seguir modelo de nome
     }
 
     public function getLoginPublico()
     {
-
         require_once __DIR__ . '/../Views/Dador/LoginDador.php';
         exit;
     }
@@ -22,17 +21,9 @@ class UsuarioController
         exit;
     }
 
+
     public function registarDador()
     {
-        $nome = $_POST['nomeCompleto'];
-        $dataNascimento = $_POST['dataNascimento'];
-        $sexo = $_POST['sexo'];
-        $tipoDocumento = $_POST['tipoDocumento'];
-        $numeroDocumento = $_POST['documento'];
-        $telefone = $_POST['telefone'];
-        $email = $_POST['email'];
-        $senha = $_POST['senha'];
-
         $usuario = new Usuario();
         $usuario->setNome($_POST['nomeCompleto']);
         $usuario->setDataNascimento($_POST['dataNascimento']);
@@ -43,13 +34,44 @@ class UsuarioController
         $usuario->setEmail($_POST['email']);
         $usuario->setSenha($_POST['senha']);
 
-
-
         $usuario->addUsuario();
 
-        die('Dador registado com sucesso!');
 
+    }
+    public function loginDador(): void
+    {
 
+        $numeroDocumento = $_POST['numeroDocumento'];
+        $senha = $_POST['senha'];
+
+        $usuario = new Usuario();
+        $usuarioBancoDados = $usuario->logarDador($numeroDocumento);
+
+        if (!$usuarioBancoDados || !password_verify($senha, $usuarioBancoDados['senha'])) {
+            Flash::set('login_erro', 'Email ou senha inválidos');
+            header('Location: /gestao_doadores/public/loginPublico');
+        } else {
+            $_SESSION['usuario'] = [
+                'id_usuario' => $usuarioBancoDados['id_usuario'],
+                'nome' => $usuarioBancoDados['nome'],
+                'tipoUsuario' => $usuarioBancoDados['tipoUsuario']
+            ];
+            Flash::set('login_sucesso', 'Login efectuado com sucesso');
+            header('Location: /gestao_doadores/public');
+        }
+    }
+
+    public function sair()
+    {
+        session_destroy();
+        header('Location: /gestao_doadores/public');
+        exit();
+    }
+
+    public function dashboardDador()
+    {
+        require_once BASE_PATH . '/app/Views/Dador/DashboardDador.php';
+        exit();
     }
 }
 ?>

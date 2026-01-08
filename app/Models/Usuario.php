@@ -1,5 +1,4 @@
 <?php
-//require_once __DIR__ . '/../Config/Database.php';
 
 class Usuario
 {
@@ -26,6 +25,11 @@ class Usuario
     {
         $database = new Database();
         $this->conexao = $database->getConexao();
+    }
+
+    public function getIdUsuario()
+    {
+        return $this->id_usuario;
     }
 
     public function getNome()
@@ -179,27 +183,31 @@ class Usuario
     public function addUsuario()
     {
         $query = "INSERT INTO usuario (
-    nome,
-    dataNascimento,
-    sexo,
-    tipoDocumento,
-    numeroDocumento,
-    telefone,
-    email,
-    senha
-) VALUES (
-    :nome,
-    :dataNascimento,
-    :sexo,
-    :tipoDocumento,
-    :numeroDocumento,
-    :telefone,
-    :email,
-    :senha
-)";
+            nome,
+            dataNascimento,
+            sexo,
+            tipoDocumento,
+            numeroDocumento,
+            telefone,
+            email,
+            senha,
+            tipoUsuario
+        ) VALUES (
+            :nome,
+            :dataNascimento,
+            :sexo,
+            :tipoDocumento,
+            :numeroDocumento,
+            :telefone,
+            :email,
+            :senha,
+            :tipoUsuario
+        )";
 
         $stmt = $this->conexao->prepare($query);
-        return $stmt->execute([
+
+        // add usuário
+        $stmt->execute([
             ':nome' => $this->nome,
             ':dataNascimento' => $this->dataNascimento,
             ':sexo' => $this->sexo,
@@ -207,9 +215,34 @@ class Usuario
             ':numeroDocumento' => $this->numeroDocumento,
             ':telefone' => $this->telefone,
             ':email' => $this->email,
-            ':senha' => $this->senha
+            ':senha' => $this->senha,
+            ':tipoUsuario' => TipoUsuario::DADOR
         ]);
+
+        $id_usuario = $this->conexao->lastInsertId();
+
+        //add doador com usuário já cadastrado
+
+        $query = "INSERT INTO dador (usuarioId) VALUES (:usuarioId)";
+        $stmt = $this->conexao->prepare($query);
+        $doadorRegistado = $stmt->execute([
+            ':usuarioId' => $id_usuario
+        ]);
+
+        return $doadorRegistado;
     }
+
+    public function logarDador($numeroDocumento)
+    {
+        $query = "SELECT * from usuario
+        Where numeroDocumento = :numeroDocumento";
+
+        $stmt = $this->conexao->prepare($query);
+        $stmt->execute([':numeroDocumento' => $numeroDocumento]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+
 }
 
 

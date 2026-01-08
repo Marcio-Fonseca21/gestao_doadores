@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="css/cadastro.css" />
   <link rel="icon" href="../favcon/favicon.ico">
 </head>
-
 <body>
   <div class="container" id="container">
     <div class="containerImagemBackground"></div>
@@ -24,22 +23,22 @@
         <form action="/gestao_doadores/public/addDoador" method="POST">
           <div class="inputs">
             <label for="nomeCompleto">Nome completo:</label>
-            <input type="text" id="nomeCompleto" name="nomeCompleto" placeholder="Nome completo" />
+            <input type="text" id="nomeCompleto" name="nomeCompleto" placeholder="Nome completo" required />
             <br /><br />
 
             <label for="dataNascimento">Data de nascimento:</label>
-            <input type="date" id="dataNascimento" name="dataNascimento" />
+            <input type="date" id="dataNascimento" name="dataNascimento" required/>
             <br /><br />
 
             <label for="sexo">Sexo:</label>
-            <select id="sexo" name="sexo">
+            <select id="sexo" name="sexo" required>
               <option value="" selected disabled>Selecione o Sexo</option>
               <option value="M">Masculino</option>
               <option value="F">Feminino</option>
             </select>
             <br /><br />
             <label for="tipoDocumento">Tipo de Documento:</label>
-            <select id="tipoDocumento" name="tipoDocumento">
+            <select id="tipoDocumento" name="tipoDocumento" required>
               <option value="" selected disabled>Selecione o tipo de Documento</option>
               <option value="BI">Bilhete</option>
               <option value="PASS">Passaporte</option>
@@ -48,23 +47,23 @@
             <br /><br />
 
             <label for="documento">Nº do Documento:</label>
-            <input type="text" id="documento" name="documento" placeholder="Documento Nº" />
+            <input type="text" id="documento" name="documento" placeholder="Documento Nº" required />
             <br /><br />
 
             <fieldset>
               <legend class="informacoes">Contactos</legend>
 
               <label for="telefone">Telefone:</label>
-              <input type="tel" id="telefone" name="telefone" placeholder="Telefone" />
+              <input type="tel" id="telefone" name="telefone" placeholder="Telefone" required/>
               <br /><br />
 
               <label for="email">Email:</label>
-              <input type="email" id="email" name="email" placeholder="example@gmail.com" />
+              <input type="email" id="email" name="email" placeholder="example@gmail.com" required/>
             </fieldset>
             <br />
 
             <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" placeholder="Senha" />
+            <input type="password" id="senha" name="senha" placeholder="Senha" required/>
             <br /><br />
 
             <button type="submit">Cadastrar</button><br />

@@ -1,4 +1,8 @@
 <?php
+define('BASE_URL_PUBLIC', '/gestao_doadores/public');
+
+// caminho físico (para require)
+define('BASE_PATH', dirname(__DIR__));
 
 spl_autoload_register(function ($class_name) {
 
@@ -6,7 +10,8 @@ spl_autoload_register(function ($class_name) {
         '../app/Models/',
         '../Config/',
         '../app/Controllers/',
-        '../app/Core/'
+        '../app/Core/',
+        '../app/Helpers/'
     ];
     foreach ($dirs as $dir) {
         $file = __DIR__ . '/' . $dir . $class_name . '.php';

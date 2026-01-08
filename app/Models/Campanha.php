@@ -25,7 +25,17 @@ class Campanha
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
+
+    public function getCampanhaPorId($id_campanha) 
+{
+    $sql = "SELECT * FROM campanha WHERE id_campanha = :id_campanha AND is_active = 1";
+    $stmt = $this->conexao->prepare($sql);
+    $stmt->bindParam(':id_campanha', $id_campanha,PDO::PARAM_INT);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);//Teste
 }
+}
+
 
 
 ?>
