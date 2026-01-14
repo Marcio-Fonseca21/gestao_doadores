@@ -8,6 +8,7 @@ spl_autoload_register(function ($class_name) {
 
     $dirs = [
         '../app/Models/',
+        '../app/Models/Enum/',
         '../Config/',
         '../app/Controllers/',
         '../app/Core/',

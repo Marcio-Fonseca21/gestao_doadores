@@ -41,6 +41,18 @@ class Router
                 self::call('UsuarioController', 'dashboardDador');
                 break;
 
+            // Apagar
+            case 'usuario/atualizarPerfil':
+                self::call('UsuarioController', 'atualizarPerfil');
+                break;
+
+            case 'usuario/alterarSenha':
+                self::call('UsuarioController', 'alterarSenha');
+                break;
+            case 'doacao/agendar':
+                self::call('DoacaoController', 'agendar');
+                break;
+
             default:
                 http_response_code(404);
                 echo 'Página não encontrada';

@@ -1,5 +1,5 @@
 <?php
-require_once  BASE_PATH . '/app/Models/Enum/TipoUsuario.php';
+require_once BASE_PATH . '/app/Models/Enum/TipoUsuario.php';
 
 class Usuario
 {
@@ -244,7 +244,73 @@ class Usuario
     }
 
 
+
+    //Analisar 
+    public function atualizarPerfilCompleto($id_usuario, $dados)
+    {
+        try {
+            $this->conexao->beginTransaction();
+
+            // 1. Atualiza a tabela 'usuario' (Dados Pessoais)
+            $sqlUser = "UPDATE usuario SET nome = :nome, sexo = :sexo, email = :email, dataNascimento = :dataNascimento, tipoDocumento = :tipoDocumento, numeroDocumento = :numeroDocumento, telefone = :telefone WHERE id_usuario = :id";
+            $stmtUser = $this->conexao->prepare($sqlUser);
+            $stmtUser->execute([
+                ':nome' => $dados['nome'],
+                ':sexo' => $dados['sexo'],
+                ':email' => $dados['email'],
+                ':dataNascimento' => $dados['dataNascimento'],
+                ':tipoDocumento' => $dados['tipoDocumento'],
+                ':numeroDocumento' => $dados['numeroDocumento'],
+                ':telefone' => $dados['telefone'],
+                ':id' => $id_usuario,
+
+            ]);
+
+            // 2. Atualiza a tabela 'dador' (Dados Complementares)
+            $sqlDador = "UPDATE dador SET 
+                nacionalidade = :nacionalidade,
+                indicadorPais = :indicadorPais,
+                peso = :peso,
+                tipoSanguineo = :tipoSanguineo,
+                altura = :altura,
+                doencaCronica = :doenca,
+                historicoTransfusao = :historicoTransfusao
+                WHERE usuarioId = :id";
+
+            $stmtDador = $this->conexao->prepare($sqlDador);
+
+            $stmtDador->execute([
+                ':nacionalidade' => $dados['nacionalidade'],
+                ':indicadorPais' => $dados['indicadorPais'],
+                ':peso' => $dados['peso'],
+                ':tipoSanguineo' => $dados['tipoSanguineo'],
+                ':altura' => $dados['altura'],
+                ':doenca' => $dados['doenca'],
+                ':historicoTransfusao' => $dados['historicoTransfusao'],
+                ':id' => $id_usuario
+            ]);
+
+
+            $this->conexao->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conexao->rollBack();
+            return false;
+        }
+    }
+
+    public function getUsuarioCompleto($id)
+    {
+        $query = "SELECT u.*, d.* FROM usuario u 
+              LEFT JOIN dador d ON u.id_usuario = d.usuarioId 
+              WHERE u.id_usuario = :id";
+        $stmt = $this->conexao->prepare($query);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
+
+
 
 
 ?>

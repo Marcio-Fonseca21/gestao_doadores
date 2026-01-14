@@ -1,0 +1,465 @@
+/* ============================================================
+   1. VARIÁVEIS E RESET
+   ============================================================ */
+:root {
+    --vermelho-sangue: #bc1a22;
+    --vermelho-hover: #8e1319;
+    --vermelho-suave: #fff5f5;
+    --branco: #ffffff;
+    --cinza-claro: #f4f4f4;
+    --texto-escuro: #333333;
+    --texto-suave: #666666;
+    --transicao: 0.3s;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--cinza-claro);
+    color: var(--texto-escuro);
+    line-height: 1.6;
+}
+
+/* ============================================================
+   2. HEADER / NAVBAR
+   ============================================================ */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70px;
+    background: var(--branco);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    z-index: 1000;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--texto-escuro);
+}
+
+.logo span {
+    color: var(--vermelho-sangue);
+}
+
+.logo-link {
+    text-decoration: none;
+}
+
+.bem-vindo-logout {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.bem-vindo-logout a {
+    text-decoration: none;
+}
+
+.btn-nav {
+    background-color: var(--vermelho-sangue);
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+.btn-nav:hover {
+    background-color: var(--vermelho-hover);
+}
+
+/* ============================================================
+   3. MENU LATERAL
+   ============================================================ */
+.menu-lateral {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 220px;
+    height: calc(100vh - 70px);
+    background: var(--branco);
+    border-right: 1px solid #eee;
+    transition: width var(--transicao);
+    overflow: hidden;
+}
+
+.menu-lateral.recolhido {
+    width: 70px;
+}
+
+.menu-opcoes {
+    display: flex;
+    flex-direction: column;
+}
+
+.opcao-menu {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 15px 20px;
+    color: var(--texto-escuro);
+    text-decoration: none;
+    border-left: 4px solid transparent;
+    transition: var(--transicao);
+}
+
+.opcao-menu:hover {
+    background: var(--vermelho-suave);
+    color: var(--vermelho-sangue);
+    border-left: 4px solid var(--vermelho-sangue);
+}
+
+.menu-lateral.recolhido .opcao-menu span {
+    display: none;
+}
+
+.menu-lateral.recolhido .opcao-menu {
+    justify-content: center;
+}
+
+/* ============================================================
+   4. CONTEÚDO PRINCIPAL
+   ============================================================ */
+.conteudo-principal {
+    margin-left: 220px;
+    padding: 100px 30px 30px;
+    transition: margin-left var(--transicao);
+}
+
+.conteudo-principal.expandido {
+    margin-left: 70px;
+}
+
+.area-dashboard {
+    width: 100%;
+}
+
+/* ============================================================
+   5. PAINÉIS (SPA)
+   ============================================================ */
+.painel-conteudo {
+    animation: fade 0.3s ease;
+}
+
+@keyframes fade {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   6. GRID INÍCIO
+   ============================================================ */
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.info-card {
+    background: var(--branco);
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    text-align: center;
+    border-bottom: 4px solid var(--vermelho-sangue);
+}
+
+.info-card p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--vermelho-sangue);
+}
+
+/* ============================================================
+   7. PERFIL
+   ============================================================ */
+.grid-perfil {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.perfil-bloco {
+    background: var(--branco);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    transition: transform var(--transicao);
+}
+.perfil-bloco:hover {
+    transform: translateY(-5px);
+}
+
+.perfil-bloco h3 {
+    margin-bottom: 15px;
+    color: var(--vermelho-sangue);
+}
+
+.conteudo-bloco p {
+    font-size: 0.95rem;
+    color: var(--texto-escuro);
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+
+.conteudo-bloco input,
+.conteudo-bloco textarea {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+}
+
+.btn-editar,
+.btn-guardar {
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    margin-top: 10px;
+    transition: transform var(--transicao);
+}
+.btn-guardar {
+    background: var(--vermelho-sangue);
+    color: #fff;
+}
+
+.btn-editar:hover {
+    background: #444;
+    transform: scale(1.05);
+}
+
+.btn-guardar:hover {
+    background: var(--vermelho-hover);
+    transform: scale(1.05);
+}
+
+.msg-sucesso {
+    margin-top: 8px;
+    color: green;
+    font-size: 0.9rem;
+}
+/* ============================================================
+   8. CAMPANHAS (GRID RESPONSIVO)
+   ============================================================ */
+#painel-campanhas .container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.campaigns-carousel {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.campaign-card {
+    background: var(--branco);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform var(--transicao);
+}
+
+.campaign-card:hover {
+    transform: translateY(-5px);
+}
+
+.campaign-card p {
+    color: var(--texto-suave);
+    font-size: 0.95rem;
+}
+
+.campaign-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-ver {
+    flex: 1;
+    padding: 10px;
+    background: var(--vermelho-sangue);
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.btn-agendar {
+    flex: 1;
+    padding: 10px;
+    background: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+/* ============================================================
+   9. RESPONSIVO
+   ============================================================ */
+@media (max-width: 768px) {
+    .menu-lateral {
+        width: 70px;
+    }
+@media (max-width: 768px) {
+    .grid-perfil {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .perfil-bloco {
+        padding: 20px;
+    }
+}
+    .conteudo-principal {
+        margin-left: 70px;
+        padding: 90px 15px;
+    }
+
+    .menu-lateral .opcao-menu span {
+        display: none;
+    }
+
+    .campaign-actions {
+        flex-direction: column;
+    }
+}
+
+
+
+
+#painel-perfil {
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* ============================================================
+   HERO COM IMAGEM E TEXTO DINÂMICO
+   ============================================================ */
+
+.hero-doacao {
+    width: 100%;
+    height: 260px;
+    background-image: url("../img/doacaoSangue.jpg");
+    background-size: cover;
+    background-position: center;
+    border-radius: 18px;
+    margin-bottom: 40px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(188, 26, 34, 0.85),
+        rgba(0, 0, 0, 0.4)
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 30px;
+    color: #fff;
+}
+
+.hero-overlay h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.hero-dinamico {
+    font-size: 1.1rem;
+    animation: fadeTexto 6s infinite;
+}
+
+/* EFEITO SUAVE DE TEXTO */
+@keyframes fadeTexto {
+    0%   { opacity: 0; transform: translateY(10px); }
+    15%  { opacity: 1; transform: translateY(0); }
+    70%  { opacity: 1; }
+    100% { opacity: 0; }
+}
+
+/* ============================================================
+   INDICADORES
+   ============================================================ */
+
+.indicadores {
+    margin-bottom: 40px;
+}
+
+/* ============================================================
+   4 SEÇÕES INTELIGENTES
+   ============================================================ */
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 25px;
+}
+
+.bloco-inteligente {
+    background: var(--branco);
+    padding: 22px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    transition: transform 0.3s ease;
+}
+
+.bloco-inteligente:hover {
+    transform: translateY(-6px);
+}
+
+.bloco-inteligente h4 {
+    margin-bottom: 10px;
+    color: var(--vermelho-sangue);
+}
+
+.bloco-inteligente p {
+    font-size: 0.95rem;
+    color: var(--texto-suave);
+    line-height: 1.6;
+}
+
+/* ============================================================
+   RESPONSIVO
+   ============================================================ */
+
+@media (max-width: 768px) {
+    .hero-doacao {
+        height: 220px;
+    }
+
+    .hero-overlay h2 {
+        font-size: 1.6rem;
+    }
+}

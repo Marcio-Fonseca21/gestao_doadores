@@ -2,6 +2,7 @@
 
 class CampanhaController
 {
+    
     public function listarCampanhasActivas()
     {
         $campanhaModel = new Campanha();
@@ -32,9 +33,7 @@ class CampanhaController
             echo "ID da campanha não fornecido.";
         }
     }
+
 }
-
-
-
 
 ?>
