@@ -4,8 +4,6 @@ class Dador
 {
     private $id_dador;
     private $nacionalidade;
-    private $indicador_pais;
-    private $telefone;
     private $peso;
     private $tipo_sanguineo;
     private $altura;

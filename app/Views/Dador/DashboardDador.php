@@ -148,6 +148,9 @@
                                 <span
                                     id="numeroDocumentoExibido"><?php echo $usuarioLogado['numeroDocumento']; ?></span>
                             </p>
+                            <p><strong>Indicador do país:</strong>
+                                <span id="indicadorPaisExibido"><?php echo ($usuarioLogado['indicadorPais']) ?></span>
+                            </p>
                             <p><strong>Telefone:</strong>
                                 <span id="telefoneExibido"><?php echo $usuarioLogado['telefone']; ?></span>
                             </p>
@@ -168,9 +171,6 @@
                             <p><strong>Nacionalidade:</strong>
                                 <span id="nacionalidadeExibido"><?php echo ($usuarioLogado['nacionalidade']) ?></span>
                             </p>
-                            <p><strong>Indicador do país:</strong>
-                                <span id="indicadorPaisExibido"><?php echo ($usuarioLogado['indicadorPais']) ?></span>
-                            </p>
                             <p><strong>Peso:</strong>
                                 <span id="pesoExibido"><?php echo ($usuarioLogado['peso']) ?></span>
                             </p>
@@ -184,7 +184,8 @@
                                 <span id="doencaExibido"><?php echo ($usuarioLogado['doencaCronica']) ?></span>
                             </p>
                             <p><strong>Histórico de transfusão:</strong>
-                                <span id="historicoExibido"><?php echo ($usuarioLogado['historicoTransfusao']) ?></span>
+                                <span
+                                    id="historicoTransfusaoExibido"><?php echo ($usuarioLogado['historicoTransfusao']) ?></span>
                             </p>
                         </div>
                         <button type="button" class="btn-editar"
@@ -255,16 +256,67 @@
 
             <!-- AGENDADAS -->
             <section id="painel-agendadas" class="painel-conteudo" style="display:none">
-                <h2>Campanhas Agendadas</h2>
+                <h2 class="title-red">Minhas Campanhas Agendadas</h2>
+
+                <div class="container-tabela">
+                    <table class="tabela-dashboard">
+                        <thead>
+                            <tr>
+                                <th>Campanha</th>
+                                <th>Local / Hospital</th>
+                                <th>Data Marcada</th>
+                                <th>Status</th>
+                                <th>Observações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($agendamentos as $ag): ?>
+                                <tr>
+                                    <td><strong><?= htmlspecialchars($ag['nome_campanha']) ?></strong></td>
+                                    <td><?= htmlspecialchars($ag['nome_hospital']) ?></td>
+                                    <td><?= date('d/m/Y H:i', strtotime($ag['data_marcacao'])) ?></td>
+                                    <td>
+                                        <span class="badge-status <?= strtolower($ag['status_doacao']) ?>">
+                                            <?= htmlspecialchars($ag['status_doacao']) ?>
+                                        </span>
+                                    </td>
+                                    <td><span
+                                            class="motivo-texto"><?= htmlspecialchars($ag['motivo'] ?? 'Nenhuma') ?></span>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
             </section>
 
             <!-- DOAÇÃO VOLUNTÁRIA -->
             <section id="painel-voluntaria" class="painel-conteudo" style="display:none">
-                <h2>Doação Voluntária</h2>
-                <input type="date">
-                <input type="text" placeholder="Local da doação">
-                <textarea placeholder="Observações"></textarea>
-                <button>Confirmar doação</button>
+                <div class="card-voluntario">
+                    <h2 class="title-red">Agendar Doação Voluntária</h2>
+                    <p class="instrucao">Escolha o hospital e o horário que melhor se adaptam à sua rotina.</p>
+
+                    <form id="formVoluntario" class="form-grid">
+                        <div class="input-group">
+                            <label>Onde deseja doar?</label>
+                            <select id="voluntario_hospital" required>
+                                <option value="">Selecione um hospital...</option>
+                                <?php foreach ($hospitais as $h): ?>
+                                    <option value="<?= $h['id_hospital'] ?>"><?= htmlspecialchars($h['nome']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Data e Hora</label>
+                            <input type="datetime-local" id="voluntario_data" required>
+                        </div>
+
+                        <button type="submit" class="btn-confirmar-voluntario">
+                            Confirmar Agendamento Voluntário
+                        </button>
+                    </form>
+                </div>
             </section>
 
         </main>

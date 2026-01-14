@@ -36,7 +36,6 @@ class UsuarioController
 
         $usuario->addUsuario();
 
-
     }
     public function loginDador(): void
     {
@@ -68,7 +67,7 @@ class UsuarioController
         exit();
     }
 
-    public function dashboardDador()
+    /*public function dashboardDador()
     {
         //Se o user não tiver sessão ou se tiver e não for dador
         if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['tipoUsuario'] !== TipoUsuario::DADOR) {
@@ -85,25 +84,42 @@ class UsuarioController
 
         require_once BASE_PATH . '/app/Views/Dador/DashboardDador.php';
         exit();
+
+    }*/
+
+    public function dashboardDador()
+    {
+        if (!isset($_SESSION['usuario']) || $_SESSION['usuario']['tipoUsuario'] !== TipoUsuario::DADOR) {
+            header('Location: /gestao_doadores/public');
+            exit();
+        }
+
+        $idUsuario = $_SESSION['usuario']['id_usuario'];
+
+        $usuario = new Usuario();
+        $usuarioLogado = $usuario->getUsuarioCompleto($idUsuario);
+
+        $campanhaModel = new Campanha();
+        $campanhas = $campanhaModel->getCampanhasAtivas();
+
+        $doacaoModel = new Doacao();
+        $agendamentos = $doacaoModel->listarAgendamentosPorDador($idUsuario);
+
+        // --- NOVA PARTE: BUSCAR HOSPITAIS PARA O FORMULÁRIO VOLUNTÁRIO ---
+        $db = new Database();
+        $conn = $db->getConexao();
+        $stmtH = $conn->prepare("SELECT id_hospital, nome FROM hospital");
+        $stmtH->execute();
+        $hospitais = $stmtH->fetchAll(PDO::FETCH_ASSOC);
+        // ----------------------------------------------------------------
+
+        require_once BASE_PATH . '/app/Views/Dador/DashboardDador.php';
+        exit();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //Apagar
 
     public function atualizarPerfil()
     {
+
         header('Content-Type: application/json');
 
         // Captura o JSON enviado pelo JS
@@ -119,13 +135,30 @@ class UsuarioController
         $secao = $dadosEntrada['secao'];
         $valores = $dadosEntrada['dados'];
 
-        // Aqui usamos o seu Model Usuario que já tem a conexão
         $db = new Database();
         $conn = $db->getConexao();
 
         try {
             if ($secao === 'pessoais') {
-                $sql = "UPDATE usuario SET nome = :nome, sexo = :sexo, email = :email, dataNascimento = :dataNascimento, tipoDocumento = :tipoDocumento, numeroDocumento = :numeroDocumento, telefone = :telefone WHERE id_usuario = :id";
+
+                $usuario = new Usuario();
+
+                $usuarioBanco = $usuario->getUsuarioByNumeroDocumento($valores['numeroDocumento']);
+
+                // se já existe um usuário com o mesmo número de documento e tem um id diferente do usuário logado, quer dizer que o número de documento já está associado a outro usuário
+                if ($usuarioBanco && $usuarioBanco['id_usuario'] !== $_SESSION['usuario']['id_usuario']) {
+                    echo json_encode(['status' => 'erro', 'mensagem' => 'Número de documento já existe']);
+                    exit;
+                }
+
+                $usuarioBanco = $usuario->getUsuarioByEmail($valores['email']);
+
+                if ($usuarioBanco && $usuarioBanco['id_usuario'] !== $_SESSION['usuario']['id_usuario']) {
+                    echo json_encode(['status' => 'erro', 'mensagem' => 'Email já existe']);
+                    exit;
+                }
+
+                $sql = "UPDATE usuario SET nome = :nome, sexo = :sexo, email = :email, dataNascimento = :dataNascimento, tipoDocumento = :tipoDocumento, numeroDocumento = :numeroDocumento, telefone = :telefone, indicadorPais = :indicadorPais WHERE id_usuario = :id";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([
                     ':nome' => $valores['nome'],
@@ -135,40 +168,32 @@ class UsuarioController
                     ':tipoDocumento' => $valores['tipoDocumento'],
                     ':numeroDocumento' => $valores['numeroDocumento'],
                     ':telefone' => $valores['telefone'],
+                    ':indicadorPais' => $valores['indicadorPais'],
                     ':id' => $id_usuario,
                 ]);
-           /* } else {
-                $sql = "UPDATE dador SET nacionalidade = :nacionalidade, peso = :peso, tipoSanguineo = :tipoSanguineo WHERE usuarioId = :id";
+            } else {
+                $sql = "UPDATE dador SET 
+                    nacionalidade = :nacionalidade,
+                    peso = :peso, 
+                    tipoSanguineo = :tipoSanguineo,
+                    altura = :altura,
+                    doencaCronica = :doencaCronica, 
+                    historicoTransfusao = :historicoTransfusao
+                    WHERE usuarioId = :id";
+
                 $stmt = $conn->prepare($sql);
+
                 $stmt->execute([
-                    ':nacionalidade' => $valores['nacionalidade'],
-                    ':peso' => $valores['peso'],
-                    ':tipoSanguineo' => $valores['tipoSanguineo'],
+                    ':nacionalidade' => $valores['nacionalidade'] ?? null,
+                    ':peso' => $valores['peso'] ?? null,
+                    ':tipoSanguineo' => $valores['tipoSanguineo'] ?? null,
+                    ':altura' => $valores['altura'] ?? null,
+                    ':doencaCronica' => $valores['doencaCronica'] ?? $valores['doenca'] ?? null,
+                    ':historicoTransfusao' => $valores['historicoTransfusao'] ?? null,
                     ':id' => $id_usuario
                 ]);
-            }*/  } else {
-               $sql = "UPDATE dador SET 
-               nacionalidade = :nacionalidade,
-               indicadorPais = :indicadorPais,
-               peso = :peso, 
-               tipoSanguineo = :tipoSanguineo,
-               altura = :altura,
-               doencaCronica = :doenca,
-               historicoTransfusao = :historicoTransfusao
-               WHERE usuarioId = :id";
 
-               $stmt = $conn->prepare($sql);
-               $stmt->execute([
-               ':nacionalidade' => $valores['nacionalidade'],
-               ':indicadorPais' => $valores['indicadorPais'],
-               ':peso' => $valores['peso'],
-               ':tipoSanguineo' => $valores['tipoSanguineo'],
-               ':altura' => $valores['altura'],
-               ':doencaCronica' => $valores['doenca'],
-               ':historicoTransfusao' => $valores['historicoTransfusao'],
-               ':id' => $id_usuario
-               ]);
-           }
+            }
 
             echo json_encode(['status' => 'sucesso']);
         } catch (Exception $e) {

@@ -20,6 +20,7 @@ class Usuario
     private $is_active;
     private $numeroDocumento;
     private $telefone;
+    private $indicadorPais;
 
 
     public function __construct()
@@ -172,6 +173,16 @@ class Usuario
         $this->telefone = $telefone;
     }
 
+    public function getIndicadorPais()
+    {
+        return $this->indicadorPais;
+    }
+
+    public function setIndicadorPais($indicadorPais)
+    {
+        $this->indicadorPais = $indicadorPais;
+    }
+
     public function getUsuarios()
     {
         $query = "SELECT * FROM " . $this->tabela_usuario;
@@ -190,6 +201,7 @@ class Usuario
             tipoDocumento,
             numeroDocumento,
             telefone,
+            indicadorPais,
             email,
             senha,
             tipoUsuario
@@ -200,6 +212,7 @@ class Usuario
             :tipoDocumento,
             :numeroDocumento,
             :telefone,
+            :indicadorPais,
             :email,
             :senha,
             :tipoUsuario
@@ -215,6 +228,7 @@ class Usuario
             ':tipoDocumento' => $this->tipoDocumento,
             ':numeroDocumento' => $this->numeroDocumento,
             ':telefone' => $this->telefone,
+            ':indicadorPais' => $this->indicadorPais,
             ':email' => $this->email,
             ':senha' => $this->senha,
             ':tipoUsuario' => TipoUsuario::DADOR
@@ -246,58 +260,58 @@ class Usuario
 
 
     //Analisar 
-    public function atualizarPerfilCompleto($id_usuario, $dados)
-    {
-        try {
-            $this->conexao->beginTransaction();
+    // public function atualizarPerfilCompleto($id_usuario, $dados)
+    // {
+    //     try {
+    //         $this->conexao->beginTransaction();
 
-            // 1. Atualiza a tabela 'usuario' (Dados Pessoais)
-            $sqlUser = "UPDATE usuario SET nome = :nome, sexo = :sexo, email = :email, dataNascimento = :dataNascimento, tipoDocumento = :tipoDocumento, numeroDocumento = :numeroDocumento, telefone = :telefone WHERE id_usuario = :id";
-            $stmtUser = $this->conexao->prepare($sqlUser);
-            $stmtUser->execute([
-                ':nome' => $dados['nome'],
-                ':sexo' => $dados['sexo'],
-                ':email' => $dados['email'],
-                ':dataNascimento' => $dados['dataNascimento'],
-                ':tipoDocumento' => $dados['tipoDocumento'],
-                ':numeroDocumento' => $dados['numeroDocumento'],
-                ':telefone' => $dados['telefone'],
-                ':id' => $id_usuario,
+    //         // 1. Atualiza a tabela 'usuario' (Dados Pessoais)
+    //         $sqlUser = "UPDATE usuario SET nome = :nome, sexo = :sexo, email = :email, dataNascimento = :dataNascimento, tipoDocumento = :tipoDocumento, numeroDocumento = :numeroDocumento, telefone = :telefone WHERE id_usuario = :id";
+    //         $stmtUser = $this->conexao->prepare($sqlUser);
+    //         $stmtUser->execute([
+    //             ':nome' => $dados['nome'],
+    //             ':sexo' => $dados['sexo'],
+    //             ':email' => $dados['email'],
+    //             ':dataNascimento' => $dados['dataNascimento'],
+    //             ':tipoDocumento' => $dados['tipoDocumento'],
+    //             ':numeroDocumento' => $dados['numeroDocumento'],
+    //             ':telefone' => $dados['telefone'],
+    //             ':id' => $id_usuario,
 
-            ]);
+    //         ]);
 
-            // 2. Atualiza a tabela 'dador' (Dados Complementares)
-            $sqlDador = "UPDATE dador SET 
-                nacionalidade = :nacionalidade,
-                indicadorPais = :indicadorPais,
-                peso = :peso,
-                tipoSanguineo = :tipoSanguineo,
-                altura = :altura,
-                doencaCronica = :doenca,
-                historicoTransfusao = :historicoTransfusao
-                WHERE usuarioId = :id";
+    //         // 2. Atualiza a tabela 'dador' (Dados Complementares)
+    //         $sqlDador = "UPDATE dador SET 
+    //             nacionalidade = :nacionalidade,
+    //             indicadorPais = :indicadorPais,
+    //             peso = :peso,
+    //             tipoSanguineo = :tipoSanguineo,
+    //             altura = :altura,
+    //             doencaCronica = :doenca,
+    //             historicoTransfusao = :historicoTransfusao
+    //             WHERE usuarioId = :id";
 
-            $stmtDador = $this->conexao->prepare($sqlDador);
+    //         $stmtDador = $this->conexao->prepare($sqlDador);
 
-            $stmtDador->execute([
-                ':nacionalidade' => $dados['nacionalidade'],
-                ':indicadorPais' => $dados['indicadorPais'],
-                ':peso' => $dados['peso'],
-                ':tipoSanguineo' => $dados['tipoSanguineo'],
-                ':altura' => $dados['altura'],
-                ':doenca' => $dados['doenca'],
-                ':historicoTransfusao' => $dados['historicoTransfusao'],
-                ':id' => $id_usuario
-            ]);
+    //         $stmtDador->execute([
+    //             ':nacionalidade' => $dados['nacionalidade'],
+    //             ':indicadorPais' => $dados['indicadorPais'],
+    //             ':peso' => $dados['peso'],
+    //             ':tipoSanguineo' => $dados['tipoSanguineo'],
+    //             ':altura' => $dados['altura'],
+    //             ':doenca' => $dados['doenca'],
+    //             ':historicoTransfusao' => $dados['historicoTransfusao'],
+    //             ':id' => $id_usuario
+    //         ]);
 
 
-            $this->conexao->commit();
-            return true;
-        } catch (Exception $e) {
-            $this->conexao->rollBack();
-            return false;
-        }
-    }
+    //         $this->conexao->commit();
+    //         return true;
+    //     } catch (Exception $e) {
+    //         $this->conexao->rollBack();
+    //         return false;
+    //     }
+    // }
 
     public function getUsuarioCompleto($id)
     {
@@ -306,6 +320,24 @@ class Usuario
               WHERE u.id_usuario = :id";
         $stmt = $this->conexao->prepare($query);
         $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getUsuarioByNumeroDocumento($numeroDocumento)
+    {
+        $query = "SELECT * FROM usuario u 
+              WHERE u.numeroDocumento = :numeroDocumento";
+        $stmt = $this->conexao->prepare($query);
+        $stmt->execute([':numeroDocumento' => $numeroDocumento]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function getUsuarioByEmail($email)
+    {
+        $query = "SELECT * FROM usuario u 
+              WHERE u.email = :email";
+        $stmt = $this->conexao->prepare($query);
+        $stmt->execute([':email' => $email]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }

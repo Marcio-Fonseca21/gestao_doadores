@@ -49,6 +49,7 @@ class Router
             case 'usuario/alterarSenha':
                 self::call('UsuarioController', 'alterarSenha');
                 break;
+                
             case 'doacao/agendar':
                 self::call('DoacaoController', 'agendar');
                 break;

@@ -264,7 +264,6 @@ const estadoOriginal = {
     pessoais: {},
     complementares: {}
 };
-
 function editarDados(secao, botao) {
     const bloco = secao === 'pessoais'
         ? '.perfil-bloco:nth-child(1)'
@@ -288,25 +287,42 @@ function editarDados(secao, botao) {
     // EDITAR
     spans.forEach(span => {
         const id = span.id;
-        const valorAtual = span.innerText === '—' ? '' : span.innerText;
+        const valorAtual = span.innerText.trim();
 
-        // Guarda valor original
+        // Guarda valor original para o caso de cancelar
         estadoOriginal[secao][id] = span.innerText;
 
-        span.innerHTML = `
-            <input 
-                type="text" 
-                id="input_${id}" 
-                value="${valorAtual}" 
-                style="width: 100%; padding: 5px;"
-            >
-        `;
+        // Se for o campo de histórico, cria um CHECKBOX
+        if (id === 'historicoTransfusaoExibido') {
+            const isChecked = (valorAtual === 'Sim' || valorAtual === '1') ? 'checked' : '';
+            span.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; padding: 5px;">
+                    <input 
+                        type="checkbox" 
+                        id="input_${id}" 
+                        ${isChecked} 
+                        style="width: 20px; height: 20px; cursor: pointer;"
+                    >
+                    <label for="input_${id}" style="cursor: pointer;">Sim</label>
+                </div>
+            `;
+        } else {
+            // Para todos os outros campos, mantém o INPUT TEXT original
+            const valorInput = valorAtual === '—' ? '' : valorAtual;
+            span.innerHTML = `
+                <input 
+                    type="text" 
+                    id="input_${id}" 
+                    value="${valorInput}" 
+                    style="width: 100%; padding: 5px;"
+                >
+            `;
+        }
     });
 
     botao.innerText = 'Cancelar';
     botao.dataset.estado = 'editando';
 }
-
 // GUARDAR DADOS (sem reload)
 async function guardarDados(secao) {
     const dados = {};
@@ -323,11 +339,18 @@ async function guardarDados(secao) {
     }
 
     inputs.forEach(input => {
+        // Remove 'input_' e 'Exibido' para obter a chave exata da coluna do banco
         const chave = input.id.replace('input_', '').replace('Exibido', '');
-        dados[chave] = input.value || '—';
+
+        if (input.type === 'checkbox') {
+            // Se for checkbox (Histórico), envia 1 para marcado e 0 para desmarcado
+            dados[chave] = input.checked ? 1 : 0;
+        } else {
+            dados[chave] = input.value || '—';
+        }
     });
 
-    try {
+    try { 
         const response = await fetch('/gestao_doadores/public/usuario/atualizarPerfil', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -337,14 +360,20 @@ async function guardarDados(secao) {
         const resultado = await response.json();
 
         if (resultado.status === 'sucesso') {
-
-            // Atualiza os spans com os novos valores
+            // Atualiza os spans com os novos valores visualmente
             Object.keys(dados).forEach(chave => {
                 const span = document.getElementById(chave + 'Exibido');
-                if (span) span.innerText = dados[chave];
+                if (span) {
+                    // Se for o campo de histórico, converte o 1/0 para texto "Sim/Não"
+                    if (chave === 'historicoTransfusao') {
+                        span.innerText = dados[chave] === 1 ? 'Sim' : 'Não';
+                    } else {
+                        span.innerText = dados[chave];
+                    }
+                }
             });
 
-            // Limpa estado e botão
+            // Limpa estado original daquela seção
             estadoOriginal[secao] = {};
 
             const botao = document.querySelector(
@@ -362,10 +391,13 @@ async function guardarDados(secao) {
                 ? 'msgSucessoPessoais'
                 : 'msgSucessoComplementares';
 
-            document.getElementById(msgId).innerText = "✅ Guardado com sucesso!";
-            setTimeout(() => {
-                document.getElementById(msgId).innerText = '';
-            }, 3000);
+            const msgElement = document.getElementById(msgId);
+            if (msgElement) {
+                msgElement.innerText = "✅ Guardado com sucesso!";
+                setTimeout(() => {
+                    msgElement.innerText = '';
+                }, 3000);
+            }
 
         } else {
             alert("Erro ao guardar: " + (resultado.mensagem || "Erro desconhecido"));
@@ -418,17 +450,16 @@ async function alterarSenha() {
     }
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
-    const botoesAgendar = document.querySelectorAll('.btn-agendar');
-
-    botoesAgendar.forEach(botao => {
-        botao.addEventListener('click', async (e) => {
+    // Delegação de evento para o botão Agendar
+    document.body.addEventListener('click', async (e) => {
+        if (e.target && e.target.classList.contains('btn-agendar')) {
             e.preventDefault();
-
+            const botao = e.target;
             const campanhaId = botao.dataset.campanha;
 
             botao.disabled = true;
+            const textoOriginal = botao.innerText;
             botao.innerText = 'Aguarde...';
 
             try {
@@ -443,17 +474,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (resultado.status === 'sucesso') {
                     botao.innerText = 'Agendado ✅';
                     botao.classList.add('agendado');
+                    botao.style.backgroundColor = '#28a745';
                 } else {
                     botao.disabled = false;
-                    botao.innerText = 'Agendar';
+                    botao.innerText = textoOriginal;
                     alert('Erro ao agendar: ' + (resultado.mensagem || 'Erro desconhecido'));
                 }
             } catch (err) {
                 botao.disabled = false;
-                botao.innerText = 'Agendar';
+                botao.innerText = textoOriginal;
                 console.error(err);
                 alert('Erro de conexão ao agendar.');
             }
-        });
+        }
     });
+});
+
+document.getElementById('formVoluntario')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const hospitalId = document.getElementById('voluntario_hospital').value;
+    const dataMarcacao = document.getElementById('voluntario_data').value;
+    const btn = e.target.querySelector('button');
+
+    btn.disabled = true;
+    btn.innerText = 'Agendando...';
+
+    try {
+        const response = await fetch('/gestao_doadores/public/doacao/agendar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                hospital_id: hospitalId, 
+                data_marcacao: dataMarcacao,
+                tipo_doacao: 'Voluntária'
+            })
+        });
+
+        const res = await response.json();
+
+        if (res.status === 'sucesso') {
+            alert('Agendamento voluntário realizado com sucesso!');
+            window.location.reload(); 
+        } else {
+            alert('Atenção: ' + res.mensagem);
+            btn.disabled = false;
+            btn.innerText = 'Confirmar Agendamento Voluntário';
+        }
+    } catch (err) {
+        alert('Erro ao conectar com o servidor.');
+        btn.disabled = false;
+        btn.innerText = 'Confirmar Agendamento Voluntário';
+    }
 });
